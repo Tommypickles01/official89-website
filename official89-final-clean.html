@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OFFICIAL89 | The 89 Meme Coin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #fafbfc;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #fafbfc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(250, 251, 252, 0.95);
+            padding: 20px 0;
+            overflow: hidden;
+            z-index: 10;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .banner-content {
+            display: flex;
+            white-space: nowrap;
+            animation: scroll 20s linear infinite;
+        }
+
+        .banner-text {
+            font-size: 36px;
+            font-weight: bold;
+            color: #1a1a1a;
+            padding: 0 50px;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .fullscreen-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+
+        .loading-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: 100px;
+        }
+
+        .loading-text {
+            font-size: 72px;
+            font-weight: bold;
+            color: white;
+            animation: pulse 2s ease-in-out infinite;
+            margin-bottom: 40px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-container {
+            width: 400px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            width: 0%;
+            animation: progress 3s ease-in-out forwards;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        /* Main Site */
+        #main-site {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        #main-site.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        header {
+            background: #fafbfc;
+            padding: 30px 0;
+            border-bottom: 1px solid #e8eaed;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            border: 1px solid #e8eaed;
+            padding: 8px;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .social-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 900;
+            color: #1a1a1a;
+            letter-spacing: -1px;
+        }
+
+        /* Hero Section with 3D Hands */
+        .hero {
+            position: relative;
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f5f6f8;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .center-89 {
+            position: absolute;
+            z-index: 100;
+            font-size: 200px;
+            font-weight: 900;
+            color: #1a1a1a;
+            pointer-events: none;
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-white {
+            background: #fafbfc;
+        }
+
+        .section-gray {
+            background: #f0f2f5;
+        }
+
+        h2 {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            letter-spacing: -1px;
+        }
+
+        .lore-content {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #4a4a4a;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .lore-content p {
+            margin-bottom: 20px;
+        }
+
+        .lore-content strong {
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        /* DEX Chart Section */
+        .chart-container {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin: 40px 0;
+        }
+
+        #dexscreener-embed {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 12px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 900;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            text-align: center;
+            padding: 100px 40px;
+            background: #fafbfc;
+            color: #1a1a1a;
+            border-top: 1px solid #e8eaed;
+        }
+
+        .cta-section h2 {
+            color: #1a1a1a;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 18px 48px;
+            font-size: 18px;
+            font-weight: 700;
+            background: #1a1a1a;
+            color: #ffffff;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            background: #2a2a2a;
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: #888;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 32px; }
+            h2 { font-size: 32px; }
+            .center-89 { font-size: 120px; }
+            .hero { height: 60vh; }
+            .container { padding: 0 20px; }
+            .social-icons { gap: 12px; }
+            .social-icon { width: 36px; height: 36px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="banner">
+            <div class="banner-content">
+                <span class="banner-text">OFFICIAL 89 COIN</span>
+                <span class="banner-text">OFFICIAL 89 COIN</span>
+                <span class="banner-text">OFFICIAL 89 COIN</span>
+                <span class="banner-text">OFFICIAL 89 COIN</span>
+                <span class="banner-text">OFFICIAL 89 COIN</span>
+                <span class="banner-text">OFFICIAL 89 COIN</span>
+                <span class="banner-text">OFFICIAL 89 COIN</span>
+                <span class="banner-text">OFFICIAL 89 COIN</span>
+            </div>
+        </div>
+        <video class="fullscreen-video" autoplay muted loop playsinline>
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        <div class="loading-content">
+            <div class="loading-text">89</div>
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Site -->
+    <div id="main-site">
+        <header>
+            <div class="container">
+                <nav>
+                    <div class="logo">OFFICIAL89</div>
+                    <div class="social-icons">
+                        <!-- X (Twitter) Icon -->
+                        <a href="https://x.com/i/communities/2009017533538685243" target="_blank" rel="noopener noreferrer" class="social-icon" title="Join our X Community">
+                            <img src="x-icon.png" alt="X">
+                        </a>
+                        
+                        <!-- DexScreener Icon -->
+                        <a href="https://dexscreener.com/solana/6vgrgqg3p3nxrpazkpfdon15hlwl5pmrsqygzvmdc88q" target="_blank" rel="noopener noreferrer" class="social-icon" title="View on DexScreener">
+                            <img src="dex-icon.png" alt="DexScreener">
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div id="canvas-container"></div>
+            <div class="center-89">89</div>
+        </section>
+
+        <!-- The Lore -->
+        <section class="section section-white">
+            <div class="container">
+                <h2>The 89 Meme</h2>
+                <div class="lore-content">
+                    <p><strong>89</strong>, also known as the <strong>Eight Nine Meme</strong>, is a viral hand gesture and meme format that emerged as a parody and "antidote" to the popular <strong>67 meme</strong>. Instead of the vertical 6-7 hand gesture, people wave their hands sideways or with palms facing down while repeating "89."</p>
+                    
+                    <p><strong>Origin:</strong> The 89 meme began circulating on TikTok in October 2025, with early examples showing people mimicking the cadence and style of 67 content but replacing it with "89." The gesture involves holding your hands horizontally with palms down, fingers pointing inward toward each other.</p>
+                    
+                    <p><strong>The Viral Moment:</strong> The meme exploded in late November 2025 when a video surfaced of the Grinch at Universal Studios Hollywood responding to kids saying "67" by squatting down, waving his hands sideways, and saying "89." This video became the defining moment of the meme, cementing 89's status as the official counter to 67.</p>
+                    
+                    <p><strong>Cultural Impact:</strong> Like its predecessor, 89 quickly spread across social media platforms including TikTok, Instagram, and X (Twitter). Users began creating their own 89 content, from simple hand gesture videos to elaborate skits. Major brands and influencers joined the trend, with some calling 89 the "67 antidote."</p>
+                    
+                    <p><strong>The Gesture:</strong> To properly perform the 89 gesture, extend both arms with hands horizontal, palms facing down, and fingers pointing toward each other. Move your hands up and down in alternating motions while saying "89." This creates the iconic look that has become synonymous with the meme.</p>
+                    
+                    <p><strong>Community:</strong> The 89 movement represents a playful counter-culture to 67, with supporters calling themselves part of the "89 crew." The meme has spawned countless variations, remixes, and creative interpretations, cementing its place in internet culture history.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DEX Chart -->
+        <section class="section section-gray">
+            <div class="container">
+                <h2>Live Chart</h2>
+                <div class="chart-container">
+                    <iframe 
+                        id="dexscreener-embed"
+                        src="https://dexscreener.com/solana/6vgrgqg3p3nxrpazkpfdon15hlwl5pmrsqygzvmdc88q?embed=1&theme=dark&trades=0&info=0">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <section class="section section-white">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">89M</div>
+                        <div class="stat-label">Total Supply</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Community Owned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$89</div>
+                        <div class="stat-label">Meme Value</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Cultural Impact</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>Join the 89 Movement</h2>
+            <a href="https://dexscreener.com/solana/6vgrgqg3p3nxrpazkpfdon15hlwl5pmrsqygzvmdc88q" target="_blank" class="btn">View on DEX Screener</a>
+        </section>
+
+        <footer>
+            <div class="container">
+                <p>&copy; 2026 OFFICIAL89. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const objLoaderScript = document.createElement('script');
+        objLoaderScript.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js';
+        document.head.appendChild(objLoaderScript);
+
+        let scene, camera, renderer, leftHand, rightHand;
+        let handBounce = 0;
+
+        function initThreeJS() {
+            const container = document.getElementById('canvas-container');
+            
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 50;
+            
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+            
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+            
+            const spotLight1 = new THREE.SpotLight(0x667eea, 2);
+            spotLight1.position.set(20, 20, 20);
+            scene.add(spotLight1);
+            
+            const spotLight2 = new THREE.SpotLight(0x764ba2, 1.5);
+            spotLight2.position.set(-20, 20, 20);
+            scene.add(spotLight2);
+            
+            const checkLoader = setInterval(() => {
+                if (typeof THREE.OBJLoader !== 'undefined') {
+                    clearInterval(checkLoader);
+                    loadHands();
+                }
+            }, 100);
+            
+            animate();
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function loadHands() {
+            const loader = new THREE.OBJLoader();
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0xffddaa,
+                shininess: 30
+            });
+            
+            loader.load('hand.obj', 
+                function(obj) {
+                    leftHand = obj;
+                    leftHand.traverse(child => {
+                        if (child.isMesh) child.material = material;
+                    });
+                    leftHand.scale.set(0.4, 0.4, 0.4);
+                    leftHand.position.set(-25, 0, 0);
+                    leftHand.rotation.x = Math.PI / 2;
+                    leftHand.rotation.y = Math.PI;
+                    leftHand.rotation.z = 0;
+                    scene.add(leftHand);
+                }, null, err => console.error('Error:', err));
+            
+            loader.load('hand.obj', 
+                function(obj) {
+                    rightHand = obj;
+                    rightHand.traverse(child => {
+                        if (child.isMesh) child.material = material;
+                    });
+                    rightHand.scale.set(0.4, 0.4, 0.4);
+                    rightHand.position.set(25, 0, 0);
+                    rightHand.rotation.x = Math.PI / 2;
+                    rightHand.rotation.y = Math.PI;
+                    rightHand.rotation.z = Math.PI;
+                    scene.add(rightHand);
+                }, null, err => console.error('Error:', err));
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            handBounce += 0.06;
+            const bounce = Math.sin(handBounce) * 8;
+            if (leftHand) leftHand.position.y = bounce;
+            if (rightHand) rightHand.position.y = -bounce;
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('main-site').classList.add('visible');
+                setTimeout(() => initThreeJS(), 500);
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
