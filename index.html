@@ -77,22 +77,40 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             z-index: 1;
         }
         
-        /* Mobile specific video adjustments - show full video content */
+        .video-left {
+            left: -50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .video-right {
+            left: 150%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* Mobile specific video adjustments - show three videos side by side */
         @media (max-width: 768px) {
             .fullscreen-video {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                transform: translate(-50%, -50%);
-                background: #000;
+                width: 33.333%;
+                height: 100vh;
+                object-fit: cover;
+            }
+            
+            .video-left {
+                left: 16.666%;
+            }
+            
+            .fullscreen-video:not(.video-left):not(.video-right) {
+                left: 50%;
+            }
+            
+            .video-right {
+                left: 83.333%;
             }
         }
 
@@ -571,6 +589,12 @@
             </div>
         </div>
         <video class="fullscreen-video" autoplay muted loop playsinline>
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <video class="fullscreen-video video-left" autoplay muted loop playsinline>
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <video class="fullscreen-video video-right" autoplay muted loop playsinline>
             <source src="video.mp4" type="video/mp4">
         </video>
         <div class="video-overlay"></div>
